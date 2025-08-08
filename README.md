@@ -1,5 +1,5 @@
 ﻿# Dota 2 Autoexec File Generator
-Interactive CLI tool to generate a custom Dota 2 autoexec.cfg with optimized settings and keybinds inspired by former professional players. Quickly apply performance tweaks, UI enhancements, and personalized controls all from the terminal.
+Interactive CLI tool to generate a custom Dota 2 autoexec.cfg with optimized settings and keybinds inspired by professional players. Quickly apply performance tweaks, UI enhancements, and personalized controls all from the terminal.
 
 <img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/c8341cd7-7ca6-4117-a51a-88c8549ee0c8" />
 
@@ -26,5 +26,6 @@ npx dota2-autoexec-generator
 npm install -g dota2-autoexec-generator
 dota2-autoexec-generator
 ```
+
 
 
