@@ -10,8 +10,12 @@ C:\Program Files (x86)\Steam\steamapps\common\dota 2 beta\game\dota\cfg\ # Windo
 ~/Library/Application Support/Steam/steamapps/common/dota 2 beta/game/dota/cfg/ # MacOS
 ~/.steam/steam/steamapps/common/dota 2 beta/game/dota/cfg/ # Linux
 ```
-
+  
 ## 🚀 Quick Start
+
+### Requirements:
+- [Node.js 14+](https://nodejs.org/en/download) must be installed on your computer 
+
 ### One Time Usage
 ```bash
 npx dota2-autoexec-generator
@@ -23,7 +27,4 @@ npm install -g dota2-autoexec-generator
 dota2-autoexec-generator
 ```
 
-## 🔧 Requirements
 
-*  [Node.js 14+](https://nodejs.org/en/download)
-*  Dota 2 installed
