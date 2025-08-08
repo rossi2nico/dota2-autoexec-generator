@@ -1,0 +1,38 @@
+{
+  "name": "dota2-autoexec-generator",
+  "version": "1.0.0",
+  "description": "Interactive CLI tool to generate Dota 2 autoexec.cfg files with custom settings and keybinds",
+  "main": "index.js",
+  "bin": {
+    "dota-autoexec": "./bin/cli.js"
+  },
+  "scripts": {
+    "start": "node bin/cli.js",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "dota2",
+    "dota",
+    "autoexec",
+    "config",
+    "gaming",
+    "cli",
+    "steam"
+  ],
+  "author": "Nico Rossi",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "inquirer": "^8.2.6"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rossi2nico/dota2-autoexec-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rossi2nico/dota2-autoexec-generator/issues"
+  },
+  "homepage": "https://github.com/rossi2nico/dota2-autoexec-generator#readme"
+}
