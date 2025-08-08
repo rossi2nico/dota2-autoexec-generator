@@ -27,13 +27,3 @@ dota2-autoexec-generator
 
 *  [Node.js 14+](https://nodejs.org/en/download)
 *  Dota 2 installed
-
-## ⚙️ Configurable Settings 
-
-### Performance Optimizations  
-
-<img width="673" height="269" alt="image" src="https://github.com/user-attachments/assets/7341b721-8f56-4a29-a01b-e3dccd0d62a1" />
-
-### Visual Enhancements  
-
-<img width="669" height="270" alt="image" src="https://github.com/user-attachments/assets/501529ea-72db-4461-b06d-ba08c9c5ceda" />
