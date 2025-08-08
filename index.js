@@ -28,8 +28,6 @@ class DotaAutoexecGenerator {
     this.binds = [
       'bindtoggle "o" "dota_camera_disable_zoom"',
       'bind "ctrl" "+dota_unit_movetodirection"',
-      'bind "kp_1" "say /laugh"',
-      'bind "kp_2" "say /thanks"',
       'bind "f7" disconnect'
     ];
   }
