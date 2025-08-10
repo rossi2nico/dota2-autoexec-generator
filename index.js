@@ -150,7 +150,7 @@ class DotaAutoexecGenerator {
     console.log(chalk.green('\n✓ autoexec.cfg generated successfully!'));
     console.log(chalk.gray(`📁 Location: ${configFile}`));
     console.log(chalk.gray(`📄 Size: ${configContent.length} bytes`));
-    console.log(chalk.gray("github.com/rossi2nico/dota2-autoexec-creator"))
+    console.log(chalk.gray("github.com/rossi2nico/dota2-autoexec-generator"))
   }
 }
 
