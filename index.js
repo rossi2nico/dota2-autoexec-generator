@@ -29,7 +29,8 @@ class DotaAutoexecGenerator {
           default: "1" 
         }
       },
-      minimap: {
+    
+      subjective: {
         "dota_minimap_creep_scale": { 
           name: "Minimap Creep Scale", 
           desc: "Increase for easier creepwave tracking (optional).", 
@@ -44,23 +45,63 @@ class DotaAutoexecGenerator {
           name: "Minimap Ping Duration", 
           desc: "How long pings remain visible on the minimap.", 
           default: "3" 
+        },
+        "dota_hud_healthbar_number": { 
+          name: "Show HP Number", 
+          desc: "Display exact HP number above health bar.", 
+          default: "1" 
+        },
+        "dota_health_marker_major_alpha": { 
+          name: "Major HP Divider Opacity", 
+          desc: "Opacity for major health dividers.", 
+          default: "255" 
+        },
+        "dota_health_marker_minor_alpha": { 
+          name: "Minor HP Divider Opacity", 
+          desc: "Opacity for minor health dividers.", 
+          default: "128" 
+        },
+        "dota_health_per_vertical_marker": { 
+          name: "Health Segment Spacing", 
+          desc: "Spacing between vertical HP markers.", 
+          default: "200" 
         }
       },
+    
       healthbar: {
-        "dota_health_hurt_decay_time_max": { name: "HP Bar Change Delay Max", desc: "Maximum delay for HP bar change animations.", default: "0" },
-        "dota_health_hurt_decay_time_min": { name: "HP Bar Change Delay Min", desc: "Minimum delay for HP bar change animations.", default: "0" },
-        "dota_health_hurt_delay": { name: "HP Bar Delay", desc: "General HP bar update delay.", default: "0" },
-        "dota_pain_decay": { name: "HP Pain Decay", desc: "Decay rate for HP loss indicators.", default: "0" },
-        "dota_pain_factor": { name: "HP Pain Factor", desc: "Factor influencing HP loss animation speed.", default: "0" },
-        "dota_pain_multiplier": { name: "HP Pain Multiplier", desc: "Multiplier for HP damage flash effect.", default: "0" },
-        
-        "dota_hud_healthbar_number": { name: "Show HP Number", desc: "Display exact HP number above health bar.", default: "1" },
-
-        "dota_health_marker_major_alpha": { name: "Major HP Divider Opacity", desc: "Opacity for major health dividers.", default: "255" },
-        "dota_health_marker_minor_alpha": { name: "Minor HP Divider Opacity", desc: "Opacity for minor health dividers.", default: "128" },
-        "dota_health_per_vertical_marker": { name: "Health Segment Spacing", desc: "Spacing between vertical HP markers.", default: "200" }
+        "dota_health_hurt_decay_time_max": { 
+          name: "HP Bar Change Delay Max", 
+          desc: "Maximum delay for HP bar change animations.", 
+          default: "0" 
+        },
+        "dota_health_hurt_decay_time_min": { 
+          name: "HP Bar Change Delay Min", 
+          desc: "Minimum delay for HP bar change animations.", 
+          default: "0" 
+        },
+        "dota_health_hurt_delay": { 
+          name: "HP Bar Delay", 
+          desc: "General HP bar update delay.", 
+          default: "0" 
+        },
+        "dota_pain_decay": { 
+          name: "HP Pain Decay", 
+          desc: "Decay rate for HP loss indicators.", 
+          default: "0" 
+        },
+        "dota_pain_factor": { 
+          name: "HP Pain Factor", 
+          desc: "Factor influencing HP loss animation speed.", 
+          default: "0" 
+        },
+        "dota_pain_multiplier": { 
+          name: "HP Pain Multiplier", 
+          desc: "Multiplier for HP damage flash effect.", 
+          default: "0" 
+        }
       }
-    };    
+    };
+    
 
     this.binds = [
       'bind "ctrl" "+dota_unit_movetodirection"',
@@ -118,6 +159,19 @@ class DotaAutoexecGenerator {
     const questions = [];
   
     for (const [category, settings] of Object.entries(this.settings)) {
+
+      if (category === "healthbar") {
+        questions.push({
+          type: "input",
+          name: "instant_hp_update",
+          message: `${chalk.green("Instantly Show HP Loss")}: If set to 1, all HP bar delays/animations will be disabled.`,
+          default: "1"
+        });
+  
+        continue; 
+      }
+  
+      // For other categories, prompt normally
       for (const [cmd, { name, desc, default: defaultVal }] of Object.entries(settings)) {
         questions.push({
           type: 'input',
@@ -128,9 +182,67 @@ class DotaAutoexecGenerator {
       }
     }
   
-    const answers = await inquirer.prompt(questions);
+    // Ask initial questions (including instant_hp_update)
+    let answers = await inquirer.prompt(questions);
+  
+    // Handle healthbar settings based on instant_hp_update
+    if (answers.instant_hp_update === "1") {
+      // Auto-set correlated values to 0
+      Object.assign(answers, {
+        "dota_health_hurt_decay_time_max": "0",
+        "dota_health_hurt_decay_time_min": "0",
+        "dota_health_hurt_delay": "0",
+        "dota_pain_decay": "0",
+        "dota_pain_factor": "0",
+        "dota_pain_multiplier": "0"
+      });
+    } else {
+      // Prompt user individually for these values
+      const hpQuestions = [];
+      const hpSettings = this.settings.healthbar;
+  
+      for (const key of [
+        "dota_health_hurt_decay_time_max",
+        "dota_health_hurt_decay_time_min",
+        "dota_health_hurt_delay",
+        "dota_pain_decay",
+        "dota_pain_factor",
+        "dota_pain_multiplier"
+      ]) {
+        const { name, desc, default: defaultVal } = hpSettings[key];
+        hpQuestions.push({
+          type: "input",
+          name: key,
+          message: `${chalk.green(name)}: ${desc}`,
+          default: defaultVal
+        });
+      }
+  
+      // Also include the rest of the healthbar settings
+      for (const [cmd, { name, desc, default: defaultVal }] of Object.entries(hpSettings)) {
+        if ([
+          "dota_health_hurt_decay_time_max",
+          "dota_health_hurt_decay_time_min",
+          "dota_health_hurt_delay",
+          "dota_pain_decay",
+          "dota_pain_factor",
+          "dota_pain_multiplier"
+        ].includes(cmd)) continue; // already added above
+        hpQuestions.push({
+          type: "input",
+          name: cmd,
+          message: `${chalk.green(name)}: ${desc}`,
+          default: defaultVal
+        });
+      }
+  
+      const hpAnswers = await inquirer.prompt(hpQuestions);
+      answers = { ...answers, ...hpAnswers };
+    }
+  
     return answers;
   }
+  
   
 
   generateConfig(configValues) {
