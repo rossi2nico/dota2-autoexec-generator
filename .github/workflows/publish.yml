@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     tags:
-      - 'v*'   # Run publish job when a tag like v1.0.0 is pushed
+      - 'v*'  
   pull_request:
     branches: [ main ]
 
