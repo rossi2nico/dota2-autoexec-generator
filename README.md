@@ -16,11 +16,12 @@ C:\Program Files (x86)\Steam\steamapps\common\dota 2 beta\game\dota\cfg\ # Windo
 ### Requirements:
 - [Node.js 14+](https://nodejs.org/en/download) must be installed on your computer 
 
-### Ensure latest version and run
+### Paste into terminal!
 ```bash
 npm i dota2-autoexec-generator
 npx dota2-autoexec-generator
 ```
+
 
 
 
