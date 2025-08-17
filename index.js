@@ -10,25 +10,25 @@ class DotaAutoexecGenerator {
       essentials: {
         "con_enable": { 
           name: "Enable Console", 
-          desc: "", 
+          desc: "Allows access to the developer console.", 
           default: "1",
           valueRange: ["0", "1"]
         },
         "dota_minimap_misclick_time": { 
           name: "Minimap Misclick Threshold", 
-          desc: "Enable to ensure 100% minimap responsiveness.", 
+          desc: "Prevents misclicks on the minimap; low value ensures precise control.", 
           default: "0",
-          valueRange: ["0", "1"]
+          valueRange: ["0", "0.8"]
         },
         "engine_no_focus_sleep": { 
           name: "No Sleep When Out of Focus", 
-          desc: "Run full FPS while tabbed out. Essential for streaming.", 
+          desc: "Keeps Dota running at full FPS when tabbed out; great for streaming.", 
           default: "1",
           valueRange: ["0", "1"]
         },
         "dota_camera_disable_zoom": { 
           name: "Disable Camera Zoom", 
-          desc: "Prevents accidental zoom during crucial moments such as teamfights or laning.", 
+          desc: "Stops accidental zooming during fights and laning.", 
           default: "1",
           valueRange: ["0", "1"]
         }
@@ -37,43 +37,43 @@ class DotaAutoexecGenerator {
       subjective: {
         "dota_minimap_creep_scale": { 
           name: "Minimap Creep Scale", 
-          desc: "Increase for easier creepwave tracking (optional). Creep waves are crucial and having more awareness of them can be beneficial.", 
+          desc: "Adjust creep size on the minimap for clearer wave tracking.", 
           default: "1",
           valueRange: ["1", "2"]
         },
         "dota_minimap_hero_size": { 
           name: "Minimap Hero Icon Size", 
-          desc: "Adjusts hero icon size on minimap. Larger values are suggested in order to see icons easier. This setting is also adjustable in-game", 
+          desc: "Set hero icon size on minimap; larger icons improve visibility.", 
           default: "1200",
           valueRange: ["0", "1200"]
         },
         "dota_minimap_ping_duration": { 
           name: "Minimap Ping Duration", 
-          desc: "Suggested higher number for newer players, and lower number for players used to checking the minimap.", 
+          desc: "Controls how long pings stay visible on the minimap.", 
           default: "3",
           valueRange: ["1", "5"]
         },
         "dota_hud_healthbar_number": { 
           name: "Show HP Number above health bar", 
-          desc: "Useful for calculating damage and survivability.", 
+          desc: "Displays exact HP numbers above health bars.", 
           default: "1",
           valueRange: ["0", "1"]
         },
         "dota_health_marker_major_alpha": { 
           name: "Major HP Divider Opacity", 
-          desc: "Opacity for major health dividers.", 
+          desc: "Transparency of major health bar markers.", 
           default: "255",
           valueRange: ["0", "255"]
         },
         "dota_health_marker_minor_alpha": { 
           name: "Minor HP Divider Opacity", 
-          desc: "Opacity for minor health dividers.", 
+          desc: "Transparency of minor health bar markers.", 
           default: "128",
           valueRange: ["0", "255"]
         },
         "dota_health_per_vertical_marker": { 
           name: "Health Segment Spacing", 
-          desc: "Spacing between vertical HP markers.", 
+          desc: "Sets spacing between health bar dividers.", 
           default: "200",
           valueRange: ["50", "500"]
         }
@@ -82,37 +82,37 @@ class DotaAutoexecGenerator {
       healthbar: {
         "dota_health_hurt_decay_time_max": { 
           name: "HP Bar Change Delay Max", 
-          desc: "Maximum delay for HP bar change animations.", 
+          desc: "Max time for HP bar updates to show damage/healing.", 
           default: "0",
           valueRange: ["0", "10"]
         },
         "dota_health_hurt_decay_time_min": { 
           name: "HP Bar Change Delay Min", 
-          desc: "Minimum delay for HP bar change animations.", 
+          desc: "Min time for HP bar updates to show changes.", 
           default: "0",
           valueRange: ["0", "10"]
         },
         "dota_health_hurt_delay": { 
           name: "HP Bar Delay", 
-          desc: "General HP bar update delay.", 
+          desc: "General delay before HP bar updates register.", 
           default: "0",
           valueRange: ["0", "5"]
         },
         "dota_pain_decay": { 
           name: "HP Pain Decay", 
-          desc: "Decay rate for HP loss indicators.", 
+          desc: "Speed at which damage indicators fade away.", 
           default: "0",
           valueRange: ["0", "1"]
         },
         "dota_pain_factor": { 
           name: "HP Pain Factor", 
-          desc: "Factor influencing HP loss animation speed.", 
+          desc: "Controls how quickly HP loss animations play.", 
           default: "0",
           valueRange: ["0", "1"]
         },
         "dota_pain_multiplier": { 
           name: "HP Pain Multiplier", 
-          desc: "Multiplier for HP damage flash effect.", 
+          desc: "Strength of the red damage flash effect.", 
           default: "0",
           valueRange: ["0", "1"]
         }
@@ -125,12 +125,14 @@ class DotaAutoexecGenerator {
     ];
   }
 
-  validateInput(value, valueRange) {
+  validateInput(value, valueRange, category) {
     const numValue = parseFloat(value);
     const minValue = parseFloat(valueRange[0]);
     const maxValue = parseFloat(valueRange[1]);
     
-    // Check if value is a valid number and within range
+    if (category !== "healthbar" && valueRange[0] === "0" && valueRange[1] === "1") {
+      return value === "0" || value === "1";
+    }
     if (isNaN(numValue) || numValue < minValue || numValue > maxValue) {
       return false;
     }
@@ -138,7 +140,7 @@ class DotaAutoexecGenerator {
     return true;
   }
 
-  async promptWithValidation(question) {
+  async promptWithValidation(question, category) {
     let isValid = false;
     let answer;
     
@@ -146,7 +148,10 @@ class DotaAutoexecGenerator {
       const response = await inquirer.prompt([question]);
       const value = response[question.name];
       
-      if (question.valueRange && !this.validateInput(value, question.valueRange)) {
+      if (question.valueRange[0] === "0" && question.valueRange[1] === "1" && category != "healthbar" && !this.validateInput(value, question.valueRange, category)) {
+        console.log(chalk.red(`Not valid. Enter 1 for yes or 0 for no`))
+      }
+      else if (question.valueRange && !this.validateInput(value, question.valueRange, category)) {
         console.log(chalk.red(`Not valid. Please enter a value between ${question.valueRange[0]} and ${question.valueRange[1]}.`));
       } else {
         isValid = true;
@@ -240,7 +245,7 @@ class DotaAutoexecGenerator {
               valueRange: valueRange
             };
             
-            answers[cmd] = await this.promptWithValidation(question);
+            answers[cmd] = await this.promptWithValidation(question, category);
           }
         }
         
