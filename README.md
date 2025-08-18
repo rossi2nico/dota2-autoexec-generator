@@ -14,13 +14,18 @@ C:\Program Files (x86)\Steam\steamapps\common\dota 2 beta\game\dota\cfg\ # Windo
 ## 🚀 Quick Start
 
 ### Requirements:
-- [Node.js 14+](https://nodejs.org/en/download) must be installed on your computer 
+- [Node.js 14+](https://nodejs.org/en/download) must be installed on your computer
+```bash
+docker pull node:22-alpine
+docker run -it --rm --entrypoint sh node:22-alpine
+```
 
 ### Paste into terminal!
 ```bash
 npm i dota2-autoexec-generator
 npx dota2-autoexec-generator
 ```
+
 
 
 
