@@ -1,6 +1,6 @@
 {
   "name": "dota2-autoexec-generator",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Interactive CLI tool to generate Dota 2 autoexec.cfg files with custom settings and keybinds",
   "main": "index.js",
   "bin": {
