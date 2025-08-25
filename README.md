@@ -10,7 +10,7 @@ C:\Program Files (x86)\Steam\steamapps\common\dota 2 beta\game\dota\cfg\ # Windo
 ~/Library/Application Support/Steam/steamapps/common/dota 2 beta/game/dota/cfg/ # MacOS
 ~/.steam/steam/steamapps/common/dota 2 beta/game/dota/cfg/ # Linux
 ```
-Existing autoexec.cfg files wil be saved in the same folder as `old-autoexec.cfg`
+Existing autoexec.cfg files wil be saved as `old-autoexec.cfg` in the same location.
 ## 🚀 Quick Start
 
 - [Node.js 14+](https://nodejs.org/en/download) must be installed on your computer  
@@ -25,6 +25,7 @@ docker run -it --rm --entrypoint sh node:22-alpine
 npm i dota2-autoexec-generator
 npx dota2-autoexec-generator
 ```
+
 
 
 
