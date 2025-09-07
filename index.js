@@ -321,8 +321,35 @@ class DotaAutoexecGenerator {
     const configFile = path.join(cfgPath, 'autoexec.cfg');
     const backupFile = path.join(cfgPath, 'old-autoexec.cfg');
 
+    async function fileExists(filePath) {
+      try {
+        await fs.access(filePath);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
     try {
       await fs.access(configFile);
+      if (await fileExists(backupFile)) {
+        console.log(chalk.yellow(`Warning: Backup file old-autoexec.cfg already exists.`));
+        
+        const response = await inquirer.prompt({
+          type: 'confirm',
+          name: 'proceed',
+          message: 'Do you want to overwrite it and proceed?',
+          initial: false
+        });
+        
+        if (!response.proceed) {
+          console.log('Operation cancelled.');
+          return;
+        }
+        
+        await fs.unlink(backupFile);
+      }
+
       await fs.rename(configFile, backupFile);
       console.log(chalk.yellow(`\nExisting autoexec.cfg renamed to old-autoexec.cfg`));
     } catch {
